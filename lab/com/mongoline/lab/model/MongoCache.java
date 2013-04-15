@@ -20,6 +20,7 @@ public class MongoCache extends Model {
 	private Date lastCall;
 	
 	
+	public MongoCache() {}
 	
 	public MongoCache(String value) {
 		this.value = value;
