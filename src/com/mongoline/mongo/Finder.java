@@ -42,6 +42,15 @@ public class Finder<T> extends QueryImpl<T> {
 	private static String db;
 	private static String adresse;
 	private static Integer port;
+	
+	
+	
+	private static final String prop_login = "mongo.login";
+	private static final String prop_pwd = "mongo.pwd";
+	private static final String prop_db = "mongo.db";
+	private static final String prop_url = "mongo.url";
+	private static final String prop_port = "mongo.port";
+	private static final String file_name = "conf/mongoline.properties";
 
 	public T byId(String id) {
 		return this.field(Mapper.ID_KEY).equal(new ObjectId(id)).get();
@@ -80,7 +89,7 @@ public class Finder<T> extends QueryImpl<T> {
 
 				Properties prop = new Properties();
 				try {
-					prop.load(new FileInputStream("conf/mongoline.properties"));
+					prop.load(new FileInputStream(file_name));
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -89,11 +98,14 @@ public class Finder<T> extends QueryImpl<T> {
 					e.printStackTrace();
 				}
 
-				login = prop.getProperty("mongo.login");
-				pwd = prop.getProperty("mongo.pwd");
-				db = prop.getProperty("mongo.db");
-				adresse = prop.getProperty("mongo.url");
-				port = Integer.parseInt(prop.getProperty("mongo.port"));
+			
+				
+				
+				login = prop.getProperty(prop_login);
+				pwd = prop.getProperty(prop_pwd);
+				db = prop.getProperty(prop_db);
+				adresse = prop.getProperty(prop_url);
+				port = Integer.parseInt(prop.getProperty(prop_port));
 
 				ServerAddress adressem = new ServerAddress(adresse, port);
 

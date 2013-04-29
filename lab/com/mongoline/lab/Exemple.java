@@ -16,18 +16,12 @@ public class Exemple {
 		
 		
 //		AddCall
-		
-		MongoCache.getByKey("coucou".hashCode()).call();
-		MongoCache.getByKey("coucou".hashCode()).call();
-		MongoCache.getByKey("coucou".hashCode()).call();
-		
-		MongoCache.getByKey("coucou".hashCode()).call();
-		MongoCache.getByKey("coucou".hashCode()).call();
-		MongoCache.getByKey("coucou".hashCode()).call();
-		
-		MongoCache.getByKey("coucou".hashCode()).call();
-		MongoCache.getByKey("coucou".hashCode()).call();
-		
+		String key= MongoCache.calculKey("coucou"); 
+		MongoCache.getByKey(key).call();
+		MongoCache.getByKey(key).call();
+		MongoCache.getByKey(key).call();
+		MongoCache.getByKey(key).call();
+		MongoCache.getByKey(key).call();
 		
 		MongoCache.deleteAll();
 	}
