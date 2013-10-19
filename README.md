@@ -1,4 +1,9 @@
 
+What's that ?
+---
+Just a mongo helper via morphia
+You can see exemple on lab package
+
 
 PlayFramework
 ---
