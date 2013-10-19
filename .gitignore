@@ -5,3 +5,7 @@ target
 mongoline.iml
 
 .settings
+
+.classpath
+
+.project
