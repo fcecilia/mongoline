@@ -11,13 +11,13 @@ MorphiaLoggerFactory.registerLogger(classOf[SLF4JLogrImplFactory])
 
 Maven
 ---
-
+```xml
  <dependency>
-            <groupId>com.mongoline</groupId>
-            <artifactId>mongoline</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
+   <groupId>com.mongoline</groupId>
+   <artifactId>mongoline</artifactId>
+   <version>0.0.1-SNAPSHOT</version>
+ </dependency>
+```
 
 
 Ivy
