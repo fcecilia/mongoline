@@ -52,6 +52,7 @@ public class Finder<T> extends QueryImpl<T> {
     private static final String prop_port = "mongo.port";
     private static final String file_name = "conf/mongoline.properties";
     private static final String classpath_file_name = "/mongoline.properties";
+    private static final String classpath_dev_file_name = "/mongoline.dev.properties";
 
     public T byId(String id) {
         return this.field(Mapper.ID_KEY).equal(new ObjectId(id)).get();
@@ -92,6 +93,9 @@ public class Finder<T> extends QueryImpl<T> {
                 try {
                     InputStream io = Finder.class.getClass().getResourceAsStream(classpath_file_name);
                     if (io == null) {
+                         io = Finder.class.getClass().getResourceAsStream(classpath_dev_file_name);
+                    }if (io == null) {
+
                         prop.load(new FileInputStream(file_name));
                     } else {
                         prop.load(io);
