@@ -1,9 +1,6 @@
 package com.mongoline.mongo;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.UnknownHostException;
 import java.util.Properties;
 
@@ -51,8 +48,9 @@ public class Finder<T> extends QueryImpl<T> {
     private static final String prop_url = "mongo.url";
     private static final String prop_port = "mongo.port";
     private static final String file_name = "conf/mongoline.properties";
+    private static final String file_dev_name = "conf/mongoline-dev.properties";
     private static final String classpath_file_name = "/mongoline.properties";
-    private static final String classpath_dev_file_name = "/mongoline.dev.properties";
+    private static final String classpath_dev_file_name = "/mongoline-dev.properties";
 
     public T byId(String id) {
         return this.field(Mapper.ID_KEY).equal(new ObjectId(id)).get();
@@ -96,7 +94,14 @@ public class Finder<T> extends QueryImpl<T> {
                          io = Finder.class.getClass().getResourceAsStream(classpath_dev_file_name);
                     }if (io == null) {
 
-                        prop.load(new FileInputStream(file_name));
+                        File f = new File(file_name);
+
+                        if (!f.exists()) {
+                            f = new File(file_dev_name);
+                        }
+
+
+                        prop.load(new FileInputStream(f));
                     } else {
                         prop.load(io);
                     }
