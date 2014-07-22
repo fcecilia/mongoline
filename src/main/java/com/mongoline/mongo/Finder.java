@@ -42,11 +42,11 @@ public class Finder<T> extends QueryImpl<T> {
     private static Integer port;
 
 
-    private static final String prop_login = "mongo.login";
-    private static final String prop_pwd = "mongo.pwd";
-    private static final String prop_db = "mongo.db";
-    private static final String prop_url = "mongo.url";
-    private static final String prop_port = "mongo.port";
+    public static final String prop_login = "mongo.login";
+    public static final String prop_pwd = "mongo.pwd";
+    public static final String prop_db = "mongo.db";
+    public static final String prop_url = "mongo.url";
+    public static final String prop_port = "mongo.port";
     private static final String file_name = "conf/mongoline.properties";
     private static final String file_dev_name = "conf/mongoline-dev.properties";
     private static final String classpath_file_name = "/mongoline.properties";
@@ -72,6 +72,38 @@ public class Finder<T> extends QueryImpl<T> {
 
     }
 
+    public static Properties getProperties() {
+        Properties prop = new Properties();
+        try {
+            InputStream io = Finder.class.getClass().getResourceAsStream(classpath_file_name);
+            if (io == null) {
+                io = Finder.class.getClass().getResourceAsStream(classpath_dev_file_name);
+            }
+            if (io == null) {
+
+                File f = new File(file_name);
+
+                if (!f.exists()) {
+                    f = new File(file_dev_name);
+                }
+
+
+                prop.load(new FileInputStream(f));
+            } else {
+                prop.load(io);
+            }
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return prop;
+    }
+
+
     private static String getBaseName() {
         return db;
     }
@@ -87,32 +119,7 @@ public class Finder<T> extends QueryImpl<T> {
         if (mongo_ == null) {
             try {
 
-                Properties prop = new Properties();
-                try {
-                    InputStream io = Finder.class.getClass().getResourceAsStream(classpath_file_name);
-                    if (io == null) {
-                         io = Finder.class.getClass().getResourceAsStream(classpath_dev_file_name);
-                    }if (io == null) {
-
-                        File f = new File(file_name);
-
-                        if (!f.exists()) {
-                            f = new File(file_dev_name);
-                        }
-
-
-                        prop.load(new FileInputStream(f));
-                    } else {
-                        prop.load(io);
-                    }
-                } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-
+                Properties prop = getProperties();
 
                 login = prop.getProperty(prop_login);
                 pwd = prop.getProperty(prop_pwd);
