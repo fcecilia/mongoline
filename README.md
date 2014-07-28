@@ -10,7 +10,8 @@ PlayFramework
 If you use playframework you hae to put on th Global
 
 MorphiaLoggerFactory.reset()
-MorphiaLoggerFactory.registerLogger(classOf[SLF4JLogrImplFactory])
+
+MorphiaLoggerFactory.registerLogger(SLF4JLoggerImplFactory.class);
 
 
 
