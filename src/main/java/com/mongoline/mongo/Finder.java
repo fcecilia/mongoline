@@ -2,8 +2,10 @@ package com.mongoline.mongo;
 
 import java.io.*;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Properties;
 
+import com.mongodb.*;
 import org.bson.types.ObjectId;
 
 import com.github.jmkgreen.morphia.Datastore;
@@ -11,15 +13,10 @@ import com.github.jmkgreen.morphia.Morphia;
 import com.github.jmkgreen.morphia.mapping.Mapper;
 import com.github.jmkgreen.morphia.query.Query;
 import com.github.jmkgreen.morphia.query.QueryImpl;
-import com.mongodb.DB;
-import com.mongodb.Mongo;
-import com.mongodb.MongoException;
-import com.mongodb.MongoOptions;
-import com.mongodb.ServerAddress;
 
 public class Finder<T> extends QueryImpl<T> {
     public static Datastore ds;
-    public static Mongo mongo_;
+    public static MongoClient mongo_;
 
     public Finder(Class<T> idType) {
 
@@ -127,13 +124,42 @@ public class Finder<T> extends QueryImpl<T> {
                 adresse = prop.getProperty(prop_url);
                 port = Integer.parseInt(prop.getProperty(prop_port));
 
-                ServerAddress adressem = new ServerAddress(adresse, port);
 
-                MongoOptions opt = new MongoOptions();
+                String[] split = adresse.split(",");
+
+                ArrayList<ServerAddress> serverAddresses = new ArrayList<ServerAddress>();
+
+                for (String adrr : split) {
+
+                    ServerAddress adressems;
+                    String[] split1 = adrr.split(":");
+                    if (split1.length > 1) {
+
+                        Integer port_parsed = Integer.getInteger(split1[1]);
+                        if (port_parsed != null) {
+
+                            adressems = new ServerAddress(split1[0], port_parsed);
+                        } else {
+
+                            adressems = new ServerAddress(adrr, port);
+
+                        }
+
+                    } else {
+
+                        adressems = new ServerAddress(adrr, port);
+                    }
+
+
+                        serverAddresses.add(adressems);
+
+                }
+               /* MongoOptions opt = new MongoOptions();
                 opt.autoConnectRetry = true;
                 opt.connectionsPerHost = Integer.MAX_VALUE;
+*/
 
-                mongo_ = new Mongo(adressem, opt);
+                mongo_ = new MongoClient(serverAddresses);
 
                 if (login != null && login.length() > 0 && pwd != null
                         && pwd.length() > 0) {
