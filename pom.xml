@@ -5,6 +5,11 @@
   <version>0.0.2-SNAPSHOT</version>
   <name>mongoline</name>
   <description>Just a other mongo helper</description>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+    
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
