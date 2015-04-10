@@ -1,8 +1,6 @@
 package com.mongoline.mongo;
 
-
 import org.bson.types.ObjectId;
-
 import com.github.jmkgreen.morphia.Datastore;
 import com.github.jmkgreen.morphia.annotations.Entity;
 import com.github.jmkgreen.morphia.annotations.Id;
@@ -13,7 +11,6 @@ import com.github.jmkgreen.morphia.query.UpdateOperations;
 @Entity
 public abstract class Model {
 
-	
 	@Id
 	private ObjectId id;
 
@@ -25,9 +22,9 @@ public abstract class Model {
 		return id;
 	}
 
-	public void save() {
+	public void save(MongolineConfig mongolineConfig) {
 		if (!isSaved()) {
-			getFinder().getDatastore().save(this);
+			getFinder(mongolineConfig).getDatastore().save(this);
 		}
 	}
 
@@ -35,78 +32,64 @@ public abstract class Model {
 		return getId() != null;
 	}
 
-	private <T> Finder<T> getFinder() {
+	private <T> com.mongoline.mongo.Finder<T> getFinder(MongolineConfig mongolineConfig) {
 		Class<T> clazz = getClazz();
-		Finder<T> finder = new Finder<T>(clazz);
+		com.mongoline.mongo.Finder<T> finder = new com.mongoline.mongo.Finder<T>(clazz, mongolineConfig);
 		return finder;
 	}
 
-	public void delete() {
-		getFinder().getDatastore().delete(this);
+	public void delete(MongolineConfig mongolineConfig) {
+		getFinder(mongolineConfig).getDatastore().delete(this);
 	}
 
-	public <T> void updateField(String field, Object value) {
+	public <T> void updateField(String field, Object value, MongolineConfig mongolineConfig) {
 		Class<T> clazz = getClazz();
-		Finder<T> finder = getFinder();
-
+		com.mongoline.mongo.Finder<T> finder = getFinder(mongolineConfig);
 		Datastore datastore = finder.getDatastore();
 		Query<T> updateQuery = datastore.createQuery(clazz)
 				.field(Mapper.ID_KEY).equal(getObjectId());
-		
-		
 		UpdateOperations<T> ops;
-		if(value!=null)
-		{
+		if(value!=null) {
 		 ops = datastore.createUpdateOperations(clazz).set(
 				field, value);
-		}
-		else
-		{
+		} else {
 			 ops = datastore.createUpdateOperations(clazz).unset(field);
 		}
 		datastore.update(updateQuery, ops);
 	}
 
-	public <T> void updateAdd(String field, Object value) {
+	public <T> void updateAdd(String field, Object value, MongolineConfig mongolineConfig) {
 		if (getObjectId() == null) {
-			save();
+			save(mongolineConfig);
 		}
-
 		Class<T> clazz = getClazz();
-		Datastore datastore = getFinder().getDatastore();
-
+		Datastore datastore = getFinder(mongolineConfig).getDatastore();
 		Query<T> updateQuery = datastore.createQuery(clazz)
 				.field(Mapper.ID_KEY).equal(getObjectId());
-
 		UpdateOperations<T> createUpdateOperations = datastore
 				.createUpdateOperations(clazz);
 		UpdateOperations<T> ops = createUpdateOperations.add(field, value);
 		datastore.update(updateQuery, ops);
 	}
 
-	public <T> void remove(String field, Object value) {
+	public <T> void remove(String field, Object value, MongolineConfig mongolineConfig) {
 		if (getObjectId() == null) {
-			save();
+			save(mongolineConfig);
 		}
 		Class<T> clazz = getClazz();
-		Datastore datastore = getFinder().getDatastore();
-
+		Datastore datastore = getFinder(mongolineConfig).getDatastore();
 		Query<T> updateQuery = datastore.createQuery(clazz)
 				.field(Mapper.ID_KEY).equal(getObjectId());
-
 		UpdateOperations<T> createUpdateOperations = datastore
 				.createUpdateOperations(clazz);
 		UpdateOperations<T> ops = createUpdateOperations
 				.removeAll(field, value);
 		datastore.update(updateQuery, ops);
 	}
-	
-	
+
 	@SuppressWarnings("unchecked")
 	private <T> Class<T> getClazz() {
 		Class<T> clazz = (Class<T>) this.getClass();
 		return clazz;
 	}
-	
-	
 }
