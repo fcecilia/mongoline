@@ -31,4 +31,4 @@ publishTo := {
     Some("releases"  at nexus + "sepage-release/")
 }
 
-credentials += Credentials(new File("/Users/lpereira/dev/fedora-20/.ivy2/.credentials"))
+credentials += Credentials(new File("~/.ivy2/.credentials"))
