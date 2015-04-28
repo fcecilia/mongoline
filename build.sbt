@@ -3,7 +3,7 @@ organization := "com.mongoline"
 
 name := "mongoline"
 
-version := "0.0.3-SNAPSHOT"
+version := "0.0.4-SNAPSHOT"
 
 resolvers += "Sepage Release" at "http://vps95041.ovh.net:8081/content/repositories/sepage-release/"
 
@@ -32,4 +32,3 @@ publishTo := {
 }
 
 credentials += Credentials(new File("/Users/lpereira/dev/fedora-20/.ivy2/.credentials"))
-
